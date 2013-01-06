@@ -1,23 +1,24 @@
 # Replacer
 
-Over the years, As I've learned and used RegEx in JavaScript, I've come to realise that pretty 
+Over the years, As I've learned and used Regex in JavaScript, I've come to realise that pretty 
 much all you do with it is find stuff, and replace it with other stuff. Also, doing anything 
 more complex with Regex is almost impossible unless you figure out a way of splitting apart your 
 patterns and combining them correctly; which is a ton of work in itself.
 
 
 ## Create a Replace Function
-Now, to do this with 
-memory usage in mind, you need to have variables for both the regex, and the replacement 
-function. So this either means having a whole ton of long-named variables, or a load of object 
-literals, one for each replacement.
+Now, to do this with memory usage in mind, you need to have variables for both the Regex, and 
+the replacement function. So this either means having a whole ton of long-named variables, or a 
+load of object literals, one for each replacement.
 
 _snip-1_
 ```js
 var quote_find = /["']/g, quote_replace = function(match){ return "\\" + match; };
 var num = {
 	find: /(0x)?\d+/g,
-	replace: function(match, isHex){ return "\" + (" + (isHex ? new Number(match).toString() : match) + ").toString() + "; }
+	replace: function(match, isHex){
+		return "\" + (" + (isHex ? new Number(match).toString() : match) + ").toString() + ";
+	}
 };
 ```
 
@@ -40,7 +41,7 @@ fix_nums("0x10"); // " + (16).toString() + "
 The _find_ and _replace_ used for this function are also stored as `fix_quotes.find` and 
 `fix_quotes.replace` to use as you wish.
 
-	As it just does a plain old `input.replace(find, replace)` under the hood, you can pass in 
+	NOTE: As it just does a plain old input.replace(find, replace) under the hood, you can pass in 
 	strings if you prefer to to things that way.
 
 Okay, so it gives you a little function to call instead of `string.replace(find, replace)`. 
@@ -50,7 +51,7 @@ Useful, but not _that_ useful. Time to bring out the big guns&hellip;
 ## Create an Aggregate of Many Replacements
 
 I said earlier that while it's possible, it sure isn't easy trying to break apart and combine 
-regex patterns in an easy way that works. What you could do is something like the following:
+Regex patterns in an easy way that works. What you could do is something like the following:
 
 _snip-1.1_
 ```js
@@ -80,11 +81,11 @@ matched, the relevant _replace_ will be used to replace the matched string.
 
 All the groups from that pattern will be passed in, along with the match itself. The index and 
 input values will be tagged onto the end just like you were using the regular old 
-regex/replaceFunction way.
+Regex/replaceFunction way.
 
-	Even string finds and replaces can be used; they will be converted into a Regex pattern and 
-	a function will be created to correctly generate the replace string based on the matched 
-	pattern.
+	Even string-format finds and replaces can be used; they will be converted into a Regex 
+	pattern and a function will be created to correctly generate the replace string based on the 
+	matched pattern.
 
 _snip-2.1_
 ```js
@@ -100,9 +101,9 @@ logic internally while keeping things clear and separate on the outside.
 
 	Any Regex or replaceFunction created through aggregating will have a `.base` property.
 	This will allow you see how the final product was built through your browser's console, 
-	which will be useful for debugging. A `.toString()` method will be added to any 
-	_string replaces_ converted into functions, which means some browser consoles will show the 
-	original string as a preview of the generated function.
+	which will be useful for debugging. A .toString() method will be added to any string 
+	replaces converted into functions, which means some browser consoles will show the original 
+	string as a preview of the generated function.
 
 
 ## To Do
