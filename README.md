@@ -11,7 +11,7 @@ Now, to do this with memory usage in mind, you need to have variables for both t
 the replacement function. So this either means having a whole ton of long-named variables, or a 
 load of object literals, one for each replacement.
 
-_snip-1_
+_snip-1:_
 ```js
 var quote_find = /["']/g, quote_replace = function(match){ return "\\" + match; };
 var num = {
@@ -26,7 +26,7 @@ So this is the first thing you can do with Replacer. Just pass in _find_ and _re
 parameters, and it will produce an easy-to-use function that will perform the replace on any 
 string given it.
 
-_snip-2_
+_snip-2:_
 ```js
 var fix_quotes = Replacer(/["']/g, function (match){ return "\\" + match; });
 fix_quotes("'blah'"); // \'blah\'
@@ -41,8 +41,8 @@ fix_nums("0x10"); // " + (16).toString() + "
 The _find_ and _replace_ used for this function are also stored as `fix_quotes.find` and 
 `fix_quotes.replace` to use as you wish.
 
-	NOTE: As it just does a plain old input.replace(find, replace) under the hood, you can pass in 
-	strings if you prefer to to things that way.
+> As it just does a plain old `input.replace(find, replace)` under the hood, you can pass in 
+> strings if you prefer to to things that way.
 
 Okay, so it gives you a little function to call instead of `string.replace(find, replace)`. 
 Useful, but not _that_ useful. Time to bring out the big guns&hellip;
@@ -53,12 +53,14 @@ Useful, but not _that_ useful. Time to bring out the big guns&hellip;
 I said earlier that while it's possible, it sure isn't easy trying to break apart and combine 
 Regex patterns in an easy way that works. What you could do is something like the following:
 
-_snip-1.1_
+_snip-1.1:_
 ```js
 var fix_both_find = "(" + quote_find.source + ")|(" + num_find.source + ")";
 var fix_both_replace = function (match, quote_found, num_found, num_isHex){
 	if(quote_found !== undefined){ return "\\" + match; }
-	else if(num_found !== undefined){ return "\" + (" + (isHex ? new Number(match).toString() : match) + ").toString() + "); }
+	else if(num_found !== undefined){
+		return "\" + (" + (isHex ? new Number(match).toString() : match) + ").toString() + ");
+	}
 
 	return match;
 };
@@ -83,11 +85,11 @@ All the groups from that pattern will be passed in, along with the match itself.
 input values will be tagged onto the end just like you were using the regular old 
 Regex/replaceFunction way.
 
-	Even string-format finds and replaces can be used; they will be converted into a Regex 
-	pattern and a function will be created to correctly generate the replace string based on the 
-	matched pattern.
+> Even _string-format_ finds and replaces can be used; they will be converted into a Regex 
+> pattern and a function will be created to correctly generate the replace string based on the 
+> matched pattern.
 
-_snip-2.1_
+_snip-2.1:_
 ```js
 var fix_both = Replacer.aggregate(fix_quotes, fix_nums);
 fix_both("'blah' 0x10"); // \'blah\' " + (16).toString() + "
@@ -99,11 +101,11 @@ that you can even use the aggregated function as part of a new aggregate functio
 logic internally while keeping things clear and separate on the outside.
 
 
-	Any Regex or replaceFunction created through aggregating will have a `.base` property.
-	This will allow you see how the final product was built through your browser's console, 
-	which will be useful for debugging. A .toString() method will be added to any string 
-	replaces converted into functions, which means some browser consoles will show the original 
-	string as a preview of the generated function.
+> Any Regex or replace-function created through aggregating will have a `.base` property.
+> This will allow you see how the final product was built through your browser's console, 
+> which will be useful for debugging. A `.toString()` method will be added to any string 
+> replaces converted into functions, which means some browser consoles will show the original 
+> string as a preview of the generated function.
 
 
 ## To Do
