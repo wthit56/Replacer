@@ -81,6 +81,12 @@ The _aggregate_ function will then loop through all of these objects and combine
 patterns into one big uber-pattern, and index the _replace_ functions. So when a pattern is 
 matched, the relevant _replace_ will be used to replace the matched string.
 
+> Regex allows the use of group-references (`(")string(\1)` == `(")string(")`) however, because 
+> the regex patterns are smooshed together, the group order is no longer the same. And so, any 
+> group-references are rewritten to point to the new group position instead. The only problem 
+> is, you can only reference groups 1-9. If you have a group reference that is later in the 
+> aggregated Replacer, then we can't rewrite the group-reference, and so throw an Error.
+
 All the groups from that pattern will be passed in, along with the match itself. The index and 
 input values will be tagged onto the end just like you were using the regular old 
 Regex/replaceFunction way.
@@ -95,11 +101,10 @@ var fix_both = Replacer.aggregate(fix_quotes, fix_nums);
 fix_both("'blah' 0x10"); // \'blah\' " + (16).toString() + "
 ```
 
-An Replacer aggregate function also _looks_ like a replacer. The newly generated Regex and replacer 
-function are stored as `.find` and `.replace` properties on the returned function. This means 
-that you can even use the aggregated function as part of a new aggregate function, nesting your 
-logic internally while keeping things clear and separate on the outside.
-
+An Replacer aggregate function also _looks_ like a replacer. The newly generated Regex and 
+replacer function are stored as `.find` and `.replace` properties on the returned function. This 
+means that you can even use the aggregated function as part of a new aggregate function, nesting 
+your logic internally while keeping things clear and separate on the outside.
 
 > Any Regex or replace-function created through aggregating will have a `.base` property.
 > This will allow you see how the final product was built through your browser's console, 
@@ -107,13 +112,7 @@ logic internally while keeping things clear and separate on the outside.
 > replaces converted into functions, which means some browser consoles will show the original 
 > string as a preview of the generated function.
 
-
 ## To Do
-
-- _Fix Groups_: at the moment, any group references within the _find_ parameter are ignored. 
-Ideally these would be scanned and tweaked in the build process to reference the new group 
-positions.
-	- NOTE: If the new group position is greater than 9, it won't work. Perhaps throw an error?
 
 - _Re-write Snippets_: snippets examples don't necessarily make sense, and have not been tested. 
 This needs to be done.
@@ -121,3 +120,6 @@ This needs to be done.
 - _Add Comments to .js file_.
 
 - _Re-write testing page_.
+
+- _Add `setFlags(flags)` documentation_.
+	- _Re-write flag setting_.

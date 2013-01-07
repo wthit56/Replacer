@@ -46,7 +46,9 @@
   	    }
   	).setFlags("gim");
   	console.log("find: ", e.find);
+  	console.log("find base: ", e.find.base);
   	console.log("replace: ", e.replace.base);
+  	console.log("setFlags: ", "gim");
   	console.log("blahblah > " + e("blahblah"));
   	console.groupEnd();
 
@@ -56,8 +58,34 @@
   	    e
   	);
   	console.log("find: ", f.find);
+  	console.log("find base: ", f.find.base);
   	console.log("replace: ", f.replace.base);
   	console.log("blahblah > " + f("blahblah"));
+  	console.groupEnd();
+
+  	console.log("#1# |2|".replace(/([#\|])([\W\w]*?)\1/g, "[$1]<$2>"));
+
+  	console.group("var g = aggregate + group-reference");
+  	var g = Replacer.aggregate(
+  	    { find: /\s*blah\s*/g, replace: "" },
+  	    { find: /([#\|])([\W\w]*?)\1/g, replace: "[$1]<$2>" }
+  	);
+  	console.log("find: ", g.find);
+  	console.log("find base: ", g.find.base);
+  	console.log("replace: ", g.replace.base);
+  	console.log("blah #1# |2| > " + g("blah #string# |string|"));
+  	console.groupEnd();
+
+  	console.group("failed groupIndex fix");
+  	try {
+  		Replacer.aggregate(
+  	        { find: /()()()()()()()/g, replace: "" },
+  	        { find: /([#\|])([\W\w]*?)\1/g, replace: "[$1]<$2>" }
+  	    );
+  	}
+  	catch (error) {
+  		console.error(error.message);
+  	}
   	console.groupEnd();
 		</script>
     </body>
