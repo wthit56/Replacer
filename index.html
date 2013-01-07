@@ -6,34 +6,40 @@
         <title></title>
     </head>
     <body>
-        <script src=".js" type="text/javascript"></script>
+        <script src="commented.js" type="text/javascript"></script>
 		<script type="text/javascript">
+  	var replaced, p = "PASS", f = "**************FAIL*****************";
+
   	console.group("var a = regexFind > stringReplace");
   	var a = Replacer(/a(?=(h))/g, "[a:$$|$&|$`|$'|$1]");
   	console.log("find: ", a.find);
   	console.log("replace: ", a.replace);
-  	console.log("blahblah > " + a("blahblah"));
+  	console.log("blahblah > " + (replaced = a("blahblah")));
+  	console.log((replaced === "bl[a:$|a|bl|hblah|h]hbl[a:$|a|blahbl|h|h]h") ? p : f);
   	console.groupEnd();
 
   	console.group("var b = stringFind > stringReplace");
   	var b = Replacer("a", "[b:$$|$&|$`|$'|$1]");
   	console.log("find: ", b.find);
   	console.log("replace: ", b.replace);
-  	console.log("blahblah > " + b("blahblah"));
+  	console.log("blahblah > " + (replaced = b("blahblah")));
+  	console.log((replaced === "bl[b:$|a|bl|hblah|$1]hblah") ? p : f);
   	console.groupEnd();
 
   	console.group("var c = regexFind > functionReplace");
   	var c = Replacer(/a/g, function (match) { return match.toUpperCase(); });
   	console.log("find: ", c.find);
   	console.log("replace: ", c.replace);
-  	console.log("blahblah > " + c("blahblah"));
+  	console.log("blahblah > " + (replaced = c("blahblah")));
+  	console.log((replaced === "blAhblAh") ? p : f);
   	console.groupEnd();
 
   	console.group("var d = stringFind > functionReplace");
   	var d = Replacer("a", function (match) { return match.toUpperCase(); });
   	console.log("find: ", d.find);
   	console.log("replace: ", d.replace);
-  	console.log("blahblah > " + d("blahblah"));
+  	console.log("blahblah > " + (replaced = d("blahblah")));
+  	console.log((replaced === "blAhblah") ? p : f);
   	console.groupEnd();
 
   	console.group("var e = aggregate");
@@ -49,7 +55,8 @@
   	console.log("find base: ", e.find.base);
   	console.log("replace: ", e.replace.base);
   	console.log("setFlags: ", "gim");
-  	console.log("blahblah > " + e("blahblah"));
+  	console.log("blahblah > " + (replaced = e("blahblah")));
+  	console.log((replaced === "bl[e3:L][e:$|bl|a|hblah][e2:h]bl[e3:L][e:$|blahbl|a|h][e2:h]") ? p : f);
   	console.groupEnd();
 
   	console.group("var f = nested aggregate");
@@ -60,10 +67,9 @@
   	console.log("find: ", f.find);
   	console.log("find base: ", f.find.base);
   	console.log("replace: ", f.replace.base);
-  	console.log("blahblah > " + f("blahblah"));
+  	console.log("blahblah > " + (replaced = f("blahblah")));
+  	console.log((replaced === "bl[e3:L][e:$|bl|a|hblah][f:hb]l[e:$|blahbl|a|h][e2:h]") ? p : f);
   	console.groupEnd();
-
-  	console.log("#1# |2|".replace(/([#\|])([\W\w]*?)\1/g, "[$1]<$2>"));
 
   	console.group("var g = aggregate + group-reference");
   	var g = Replacer.aggregate(
@@ -73,7 +79,8 @@
   	console.log("find: ", g.find);
   	console.log("find base: ", g.find.base);
   	console.log("replace: ", g.replace.base);
-  	console.log("blah #1# |2| > " + g("blah #string# |string|"));
+  	console.log("blah #1# |2| > " + (replaced = g("blah #1# |2|")));
+  	console.log((replaced === "[#]<1> [|]<2>") ? p : f);
   	console.groupEnd();
 
   	console.group("failed groupIndex fix");
@@ -85,7 +92,9 @@
   	}
   	catch (error) {
   		console.error(error.message);
+  		replaced = true;
   	}
+  	console.log((replaced === true) ? p : f);
   	console.groupEnd();
 		</script>
     </body>
