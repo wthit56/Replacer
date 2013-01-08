@@ -8,6 +8,12 @@
     <body>
         <script src="commented.js" type="text/javascript"></script>
 		<script type="text/javascript">
+  	// console shim
+	if (!window.console) { window.console = {}; }
+  	if (!console.log) { console.log = function (messages) { }; }
+  	if (!console.group) { console.group = function (name) { console.log("> " + name); } }
+  	if (!console.groupEnd) { console.groupEnd = function () { }; }
+
   	var replaced, p = "PASS", f = "**************FAIL*****************";
 
   	console.group("var a = regexFind > stringReplace");
