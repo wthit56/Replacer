@@ -117,9 +117,5 @@ your logic internally while keeping things clear and separate on the outside.
 - _Re-write Snippets_: snippets examples don't necessarily make sense, and have not been tested. 
 This needs to be done.
 
-- _Add Comments to .js file_.
-
-- _Re-write testing page_.
-
 - _Add `setFlags(flags)` documentation_.
-	- _Re-write flag setting_.
+	- _Re-write flag setting to be more intuitive_.
