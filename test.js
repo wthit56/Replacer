@@ -24,3 +24,34 @@ console.group("aggregate");
 	if (result != pass) { console.warn("should be: ", pass); }
 }
 console.groupEnd();
+
+console.group("converted string-pattern");
+{
+	var converted = Replacer.aggregate(
+		{
+			find: "\\^$*+?.(=)!|{,}[]\n",
+			replace: "pass"
+		}
+	);
+
+	test = "\\^$*+?.(=)!|{,}[]\n";
+	result = converted(test);
+	pass = "pass";
+	console.log(test + " -> " + result);
+	if (result != pass) { console.warn("should be: ", pass); }
+
+}
+console.groupEnd();
+
+var generateFindStringPattern = Replacer(
+	new RegExp(
+		"('|\\\"|\n|\r|\t|\b|\f)|" +
+		"(\\" + ("\\^$*+?.(=)!|{,}[]".split("").join("|\\")) + ")",
+		"g"
+	),
+	function (match, escaped) {
+		if (match.length === 0) { debugger; }
+		if (escaped) { return match; }
+		else { return "\\" + match; }
+	}
+);
