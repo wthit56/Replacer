@@ -37,7 +37,7 @@ console.group("converted string-pattern");
 	test = "\\^$*+?.(=)!|{,}[]\n";
 	result = converted(test);
 	pass = "pass";
-	console.log(test + " -> " + result);
+	console.log(test.replace("\n", "\\n") + " -> " + result);
 	if (result != pass) { console.warn("should be: ", pass); }
 
 }
