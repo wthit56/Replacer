@@ -1,14 +1,14 @@
 // console shim
 if (!window.console) { window.console = {}; }
 if (!console.log) { console.log = function (messages) { }; }
-if (!console.group) { console.group = function (name) { console.log(name + "_____vv"); } }
+if (!console.group) { console.group = function (name) { console.log("_____vv "+name); } }
 if (!console.groupEnd) { console.groupEnd = function () { console.log("^^-----") }; }
 
 console.group("aggregate");
 {
 	var aggregate = Replacer.aggregate(
 		{ find: /(2)/, replace: "[dollar:$$, match:$&, before:$`, after:$', group:$1]" },
-		{ find: /a(?=(h))/, replace: function(match, h){return match+h.toUpperCase();} }
+		{ find: /a(?=(h))/, replace: function (match, h) { return match + h.toUpperCase(); } }
 	);
 
 	var test = "123";
@@ -55,3 +55,13 @@ var generateFindStringPattern = Replacer(
 		else { return "\\" + match; }
 	}
 );
+
+
+
+//var aggregate = Replacer.aggregate(
+//	{ find: "a", replace: "[$&]" },
+//	{ find: /b(?=l)/, replace: function (match) { return "{"+match+"}" } }
+//);
+//console.dir(aggregate);
+
+//console.log(aggregate("blah"));
